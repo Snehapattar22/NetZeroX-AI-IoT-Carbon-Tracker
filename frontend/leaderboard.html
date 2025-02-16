@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard | NetZeroX</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #42a5f5, #66bb6a);
+            flex-direction: column;
+            color: white;
+        }
+
+        .navbar {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .leaderboard-container {
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            margin-top: 60px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: black;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        th {
+            background: #f9a825;
+            color: white;
+        }
+
+        .btn {
+            background-color: #f9a825;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #ff7043;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <button class="nav-btn" onclick="location.href='home.html'">Home</button>
+        <button class="nav-btn" onclick="location.href='feature.html'"> Features</button>
+        <button class="nav-btn" onclick="location.href='settings.html'">⚙️ Settings</button>
+        <button class="nav-btn" onclick="location.href='login.html'">Logout</button>
+    </div>
+
+    <div class="leaderboard-container">
+        <h2>🏆 NetZeroX Leaderboard 🏆</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>CO₂ Reduced (g)</th>
+                    <th>BTC Earned</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+            </tbody>
+        </table>
+
+        <button class="btn" onclick="resetLeaderboard()">Reset Leaderboard</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            updateLeaderboard();
+        });
+
+        function updateLeaderboard() {
+            let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+            let tableBody = document.getElementById("leaderboard-body");
+
+            tableBody.innerHTML = "";
+
+            leaderboard.sort((a, b) => b.carbonReduced - a.carbonReduced);
+
+            leaderboard.forEach((user, index) => {
+                let row = `<tr>
+                    <td>${index + 1}</td>
+                    <td>${user.name}</td>
+                    <td>${user.carbonReduced} g</td>
+                    <td>${user.btcEarned}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        function resetLeaderboard() {
+            localStorage.setItem("leaderboard", JSON.stringify([]));
+            updateLeaderboard();
+        }
+    </script>
+
+</body>
+</html>

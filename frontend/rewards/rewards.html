@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetZeroX Rewards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            text-align: center;
+            font-size: 24px;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+            background-color: #333;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 10px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover {
+            color: #4CAF50;
+        }
+
+        .hero {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        #input-form {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            margin: 5px;
+            width: 200px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #btc-qr {
+            margin-top: 20px;
+            display: none;
+            width: 200px;
+        }
+
+        #btc-address {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>NetZeroX Rewards</header>
+    <nav>
+        <ul>
+            <li><a href="#" onclick="navigate('home')">Home</a></li>
+            <li><a href="#" onclick="navigate('dashboard')">Dashboard</a></li>
+            <li><a href="#" onclick="logout()">Logout</a></li>
+            <li><a href="#" onclick="navigate('about')">About</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="text">
+            <h1>Bitcoin Rewards for Low Carbon Footprint</h1>
+            <p>Reduce CO₂ emissions and earn Bitcoin rewards with NetZeroX!</p>
+
+            <button onclick="calculateRewards()">Calculate My Rewards</button>
+            <p id="reward-message"></p>
+
+            <hr>
+
+            <h2>Your Bitcoin Wallet</h2>
+            <button onclick="generateBTCAddress()">Generate BTC Address</button>
+            <p id="btc-address">Loading...</p>
+            <img id="btc-qr" src="" alt="BTC QR Code">
+        </div>
+    </section>
+
+    <div id="input-form">
+        <label for="energyUsage">Enter your energy usage (kWh):</label>
+        <input type="text" id="energyUsage" placeholder="Energy usage in kWh"><br>
+
+        <label for="waste">Enter your waste (kg):</label>
+        <input type="text" id="waste" placeholder="Waste in kg"><br>
+
+        <label for="temperature">Enter the temperature (°C):</label>
+        <input type="text" id="temperature" placeholder="Temperature in °C"><br>
+
+        <button onclick="submitForm()">Submit</button>
+    </div>
+
+    <script>
+        function calculateRewards() {
+            document.getElementById("input-form").style.display = "block";
+        }
+
+        function submitForm() {
+            let energy_usage = document.getElementById("energyUsage").value;
+            let waste = document.getElementById("waste").value;
+            let temperature = document.getElementById("temperature").value;
+
+            if (!energy_usage || isNaN(energy_usage)) {
+                alert("Please enter a valid energy usage.");
+                return;
+            }
+
+            if (!waste || isNaN(waste)) {
+                alert("Please enter a valid waste value.");
+                return;
+            }
+
+            if (!temperature || isNaN(temperature)) {
+                alert("Please enter a valid temperature.");
+                return;
+            }
+
+            const co2_emissions = (energy_usage * 0.5) + (waste * 0.3) + (temperature * 0.1); 
+            const btc_rewards = co2_emissions * 0.001; 
+
+            document.getElementById("reward-message").innerText = `You have earned ${btc_rewards.toFixed(6)} BTC for reducing ${co2_emissions.toFixed(2)} kg of CO2 emissions!`;
+
+            document.getElementById("input-form").style.display = "none";
+        }
+
+        function generateBTCAddress() {
+            const btc_address = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"; 
+            document.getElementById("btc-address").innerText = `BTC Address: ${btc_address}`;
+            document.getElementById("btc-qr").style.display = "block"; 
+            document.getElementById("btc-qr").src = `https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${btc_address}`;
+        }
+
+        function navigate(page) {
+            alert(`Navigating to ${page}`);
+        }
+
+        function logout() {
+            alert("Logging out...");
+        }
+    </script>
+</body>
+</html>

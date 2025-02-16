@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoBot - AI Sustainability Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            text-align: center;
+        }
+
+        .navbar {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        #chatbot-container {
+            margin-top: 80px;
+            width: 90%;
+            max-width: 400px;
+            background: #222;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            display: inline-block;
+            text-align: left;
+        }
+
+        #chat-header {
+            font-weight: bold;
+            text-align: center;
+            padding: 8px;
+            background: #FFD700;
+            color: black;
+            border-radius: 5px;
+        }
+
+        #chatbox {
+            height: 250px;
+            overflow-y: auto;
+            padding: 10px;
+            font-size: 14px;
+            border-bottom: 1px solid #444;
+            background: black;
+            color: white;
+        }
+
+        input {
+            width: 75%;
+            padding: 8px;
+            border: none;
+            outline: none;
+            background: #333;
+            color: white;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #f9a825;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #ff7043;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <button class="nav-btn" onclick="location.href='index.html'">Home</button>
+        <button class="nav-btn" onclick="location.href='feature.html'"> Features</button>
+        <button class="nav-btn" onclick="location.href='dashboard.html'">Dashboard</button>
+    </div>
+
+    <h2> EcoBot - Your Sustainability Chat Assistant</h2>
+    <p>Ask about reducing CO₂ and earning BTC for sustainable actions!</p>
+
+    <div id="chatbot-container">
+        <div id="chat-header"> Chat with EcoBot</div>
+        <div id="chatbox"></div>
+        <input type="text" id="user-input" placeholder="Ask me about reducing CO₂ or earning BTC..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 NetZeroX | AI Chatbot for Sustainability
+    </div>
+
+    <script>
+        function sendMessage() {
+            let userMessage = document.getElementById("user-input").value;
+            if (!userMessage) return;
+
+            displayMessage("You: " + userMessage, "user");
+            processChatResponse(userMessage);
+            document.getElementById("user-input").value = "";
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+
+        function displayMessage(message, sender) {
+            let chatbox = document.getElementById("chatbox");
+            let msgDiv = document.createElement("div");
+            msgDiv.innerHTML = message;
+            msgDiv.style.textAlign = sender === "user" ? "right" : "left";
+            chatbox.appendChild(msgDiv);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+        function processChatResponse(userMessage) {
+            let response = getBotResponse(userMessage.toLowerCase());
+            setTimeout(() => displayMessage("EcoBot: " + response, "bot"), 500);
+        }
+
+        function getBotResponse(message) {
+            if (message.includes("reduce carbon") || message.includes("co2")) {
+                return "You can reduce CO₂ by using public transport, saving electricity, and planting trees!";
+            } else if (message.includes("earn btc") || message.includes("bitcoin")) {
+                return "You can earn BTC rewards by participating in carbon offset programs and using eco-friendly platforms.";
+            } else if (message.includes("rewards")) {
+                return "Check our Rewards section to see how sustainable actions earn you points.";
+            }
+            else if(message.includes("tips") || message.includes("gamification")){
+                return "Swap out your lightbulbs. Be efficient with your heat and AC usage. Get solar panels installed. Replace your old appliances.";
+            }
+            else {
+                return "I'm here to help! Ask me how to reduce carbon footprint or earn BTC rewards.";
+            }
+        }
+    </script>
+
+</body>
+</html>

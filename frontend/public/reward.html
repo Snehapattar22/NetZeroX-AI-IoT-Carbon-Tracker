@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetZeroX - Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #2f3542;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+        header nav {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        header nav a:hover {
+            text-decoration: underline;
+        }
+        .dashboard {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        .card {
+            background-color: white;
+            padding: 20px;
+            margin: 15px;
+            width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card h3 {
+            margin-bottom: 20px;
+            color: #2f3542;
+        }
+        .btc-address, .qr-code {
+            margin-bottom: 20px;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>NetZeroX</h1>
+        <p>Your Dashboard to Track Carbon Footprint & Earn Rewards</p>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="login.html" class="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <div class="dashboard">
+        <div class="card">
+            <h3>Reward Generated</h3>
+            <p>Congratulations! You've reduced carbon emissions and earned Bitcoin rewards.</p>
+            <p><strong>Current Bitcoin Balance: <span id="btcBalance">0.000 BTC</span></strong></p>
+            <p><strong>Your Registration Reward: <span id="registrationReward">0.000001 BTC</span></strong></p>
+            <div class="btc-address">
+                <h4>Bitcoin Address:</h4>
+                <p>1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</p>
+            </div>
+            <div class="qr-code">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://www.binance.com&size=200x200" alt="Bitcoin QR Code">
+            </div>
+            <button class="btn" onclick="copyBitcoinAddress()">Copy Bitcoin Address</button>
+        </div>
+    </div>
+
+    <script>
+        // Example function to update Bitcoin balance and rewards
+        function updateRewards() {
+            const btcBalanceElement = document.getElementById("btcBalance");
+            const registrationRewardElement = document.getElementById("registrationReward");
+
+            // Setting the current Bitcoin balance and registration reward
+            const currentBalance = 0.000;  // Initial balance is 0.000 BTC
+            const registrationReward = 0.000001;  // Registration reward is 0.000001 BTC
+
+            btcBalanceElement.textContent = `${currentBalance.toFixed(6)} BTC`;
+            registrationRewardElement.textContent = `${registrationReward.toFixed(6)} BTC`;
+        }
+
+        // Call the update function when the page loads
+        updateRewards();
+
+        // Function to copy Bitcoin address
+        function copyBitcoinAddress() {
+            const btcAddress = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa";
+            navigator.clipboard.writeText(btcAddress).then(() => {
+                alert("Bitcoin address copied to clipboard!");
+            });
+        }
+    </script>
+</body>
+</html>

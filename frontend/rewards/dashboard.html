@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetZeroX Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <h2 id="welcome-message">Welcome, User</h2>
+        <button onclick="logout()">Logout</button>
+
+        <main class="content">
+            <h1>NetZeroX Dashboard</h1>
+            <div class="charts-container">
+                <div class="info-box">
+                    <h2>Daily CO₂ Reduction & Emission</h2>
+                    <canvas id="carbonChart"></canvas>
+                </div>
+                <div class="stats">
+                    <h3>📉 Carbon Emission Today: <span id="emitted">--</span> kg</h3>
+                    <h3>🌱 Carbon Reduction Today: <span id="reduced">--</span> kg</h3>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const username = localStorage.getItem("username");
+
+            if (!username) {
+                window.location.href = "../login.html";
+            } else {
+                document.getElementById("welcome-message").textContent = `Welcome, ${username}`;
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem("username");
+            window.location.href = "../login.html";
+        }
+    </script>
+    <h2>Your GreenCoins: <span id="greenCoins">0</span></h2>
+    <button onclick="redeemCoins()">Redeem Rewards</button>
+    
+    <script>
+    async function fetchGreenCoins() {
+        const username = localStorage.getItem("username");
+        let res = await fetch("https://your-api-endpoint.com/get_rewards?username=" + username);
+        let data = await res.json();
+        document.getElementById("greenCoins").innerText = data.GreenCoins;
+    }
+    
+    async function redeemCoins() {
+        alert("Coming soon! Earn more GreenCoins to unlock rewards.");
+    }
+    
+    // Fetch coins on page load
+    fetchGreenCoins();
+    </script>
+    
+</body>
+</html>

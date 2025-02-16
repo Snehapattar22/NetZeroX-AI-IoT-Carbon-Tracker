@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Footprint Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1a1a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .card {
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+            background: #444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            background: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Carbon Footprint Calculator</h2>
+            <label>Car Usage (miles):</label>
+            <input type="number" id="car">
+            <label>Electricity (kWh):</label>
+            <input type="number" id="electricity">
+            <label>Gas (therms):</label>
+            <input type="number" id="gas">
+            <label>Flight (miles):</label>
+            <input type="number" id="flight">
+            <button onclick="calculateEmissions()">Calculate</button>
+            <p id="totalEmissions"></p>
+        </div>
+        <div class="card">
+            <h2>Emission Insights</h2>
+            <canvas id="emissionChart"></canvas>
+            <p id="insightText"></p>
+        </div>
+        <div class="card">
+            <h2>Historical Trends & Forecasting</h2>
+            <canvas id="historicalChart"></canvas>
+            <p id="historicalTrends"></p>
+        </div>
+        <div class="card">
+            <h2>Carbon Offset Suggestions</h2>
+            <p id="offsetSuggestions">Loading suggestions...</p>
+            <p id="offsetPoints">Points Earned: 0</p>
+        </div>
+        <div class="card">
+            <h2>Share Your Progress</h2>
+            <button onclick="shareProgress()">Share on Social Media</button>
+            <p id="shareMessage"></p>
+        </div>
+    </div>
+    <script>
+        let historicalData = [1000, 1200, 1400, 1300, 1250, 1100, 1050];
+        let points = 0;
+
+        function calculateEmissions() {
+            const factors = { car: 2.31, electricity: 0.92, gas: 2.2, flight: 0.89 };
+            const inputs = {
+                car: document.getElementById("car").value || 0,
+                electricity: document.getElementById("electricity").value || 0,
+                gas: document.getElementById("gas").value || 0,
+                flight: document.getElementById("flight").value || 0
+            };
+            
+            let total = 0;
+            let breakdown = [];
+            for (let key in inputs) {
+                let value = parseFloat(inputs[key]) * factors[key];
+                total += value;
+                breakdown.push({ label: key, value });
+            }
+            
+            document.getElementById("totalEmissions").innerText = `Total Emissions: ${total.toFixed(2)} kg CO₂`;
+            generateChart(breakdown);
+            updateHistoricalData(total);
+            generateOffsetSuggestions();
+        }
+
+        function updateHistoricalData(total) {
+            historicalData.push(total);
+            if (historicalData.length > 7) historicalData.shift();
+            document.getElementById("historicalTrends").innerText = `Your past emissions: ${historicalData.join(", ")} kg CO₂.`;
+            generateHistoricalChart();
+        }
+
+        function generateChart(breakdown) {
+            const ctx = document.getElementById("emissionChart").getContext("2d");
+            new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: breakdown.map(item => item.label),
+                    datasets: [{
+                        data: breakdown.map(item => item.value),
+                        backgroundColor: ["red", "blue", "green", "yellow"]
+                    }]
+                }
+            });
+        }
+
+        function generateHistoricalChart() {
+            const ctx = document.getElementById("historicalChart").getContext("2d");
+            new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7"],
+                    datasets: [{
+                        label: "Carbon Emissions (kg CO₂)",
+                        data: historicalData,
+                        borderColor: "blue",
+                        fill: false
+                    }]
+                }
+            });
+        }
+
+        function generateOffsetSuggestions() {
+            const suggestions = [
+                { text: "Plant a tree to absorb CO₂.", points: 10 },
+                { text: "Support renewable energy projects.", points: 20 },
+                { text: "Use public transport or carpool more often.", points: 15 },
+                { text: "Reduce meat consumption to lower carbon emissions.", points: 10 },
+                { text: "Invest in carbon offset programs.", points: 25 },
+                { text: "Switch to energy-efficient appliances.", points: 20 },
+                { text: "Reduce plastic usage to lower emissions.", points: 10 }
+            ];
+            const suggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
+            document.getElementById("offsetSuggestions").innerText = suggestion.text;
+            points += suggestion.points;
+            document.getElementById("offsetPoints").innerText = "Points Earned: " + points;
+        }
+
+        function shareProgress() {
+            alert("Shared: I am reducing my carbon footprint! Join me in making the world greener! 🌍 #GoGreen #CarbonNeutral");
+            document.getElementById("shareMessage").innerText = "Your progress has been shared!";
+        }
+    </script>
+</body>
+</html>

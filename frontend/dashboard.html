@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetZeroX Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #42a5f5, #66bb6a);
+            flex-direction: column;
+            color: white;
+        }
+
+        .navbar {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .dashboard-container {
+            width: 90%;
+            max-width: 1200px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            margin-top: 60px; /* To avoid overlap with navbar */
+        }
+
+        .btn {
+            background-color: #f9a825;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #ff7043;
+        }
+
+        .chart-container {
+            width: 80%;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .suggestion-box {
+            display: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: black;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .sensor-container {
+            position: fixed;
+            top: 60px; 
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            color: black;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="sensor-container">
+        <p> <b>IR Sensor</b>: <span id="vehicle-count">0</span></p>
+        <p> <b>Temperature</b>: <span id="temperature">0</span>°C</p>
+        <p> <b>Humidity</b>: <span id="humidity">0</span>%</p>
+    </div>
+    
+    <div class="navbar">
+        <button class="nav-btn" onclick="location.href='home.html'">Home</button>
+        <button class="nav-btn" onclick="location.href='feature.html'"> Features</button>
+        <button class="nav-btn" onclick="location.href='login.html'">Logout</button>
+    </div>
+
+    <div class="dashboard-container">
+        <h2>NetZeroX Real-time CO₂ Tracker</h2>
+        <button onclick="resetData()" class="btn">Reset Data</button>
+
+        <div>
+            <h3>Current CO₂ Level: <span id="carbon-level">0</span> ppm</h3>
+            <h3>Total Carbon Reduced: <span id="carbon-reduced">0</span> g CO₂</h3>
+            <button class="btn" onclick="senseData()">Sense Data</button>
+            <a href="reward.html" class="btn" id="reward-button" style="display: none;">View Rewards</a>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="carbonBarChart"></canvas>
+        </div>
+
+        <div id="suggestion-box" class="suggestion-box">
+            <h3> Take Action to Reduce CO₂!</h3>
+            <p id="suggestion-text"></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!localStorage.getItem("carbonLevel")) {
+                localStorage.setItem("carbonLevel", "0");
+                localStorage.setItem("carbonReduced", "0");
+                localStorage.setItem("btcEarned", "0.000000");
+            }
+            updateDashboard();
+        });
+
+        function getRandomCO2(lastValue) {
+            let variation = Math.random() < 0.5 ? -1 : 1; 
+            let step = Math.floor(Math.random() * 4) + 1;
+            return Math.max(400, Math.min(420, lastValue + (variation * step))); 
+        }
+
+        function senseData() {
+            let lastCO2 = parseInt(localStorage.getItem("carbonLevel")) || 400;
+            let newCO2 = getRandomCO2(lastCO2);
+            let lastReduced = parseInt(localStorage.getItem("carbonReduced")) || 0;
+
+            if (newCO2 < lastCO2) {
+                let btcEarned = parseFloat(localStorage.getItem("btcEarned") || 0);
+                let reducedAmount = (lastCO2 - newCO2) * 10;
+                btcEarned += (reducedAmount / 1000000);
+                lastReduced += reducedAmount;
+
+                localStorage.setItem("btcEarned", btcEarned.toFixed(6));
+                localStorage.setItem("carbonReduced", lastReduced);
+            }
+
+            localStorage.setItem("carbonLevel", newCO2);
+            updateDashboard();
+        }
+
+        function resetData() {
+            localStorage.setItem("carbonLevel", "0");
+            localStorage.setItem("carbonReduced", "0");
+            localStorage.setItem("btcEarned", "0.000000");
+        
+            updateDashboard(true); 
+        
+            setTimeout(() => {
+                localStorage.setItem("carbonLevel", "400");
+                updateDashboard();
+            }, 2000);
+        }
+
+        function updateDashboard(reset = false) {
+            let carbonLevel = parseInt(localStorage.getItem("carbonLevel")) || 400;
+            let carbonReduced = parseInt(localStorage.getItem("carbonReduced")) || 0;
+        
+            document.getElementById("carbon-level").innerText = carbonLevel;
+            document.getElementById("carbon-reduced").innerText = carbonReduced;
+        
+            if (carbonReduced > 0) {
+                document.getElementById("reward-button").style.display = "inline-block";
+            }
+        
+            if (carbonLevel > 415) {
+                document.getElementById("suggestion-box").style.display = "block";
+                document.getElementById("suggestion-text").innerText = getCarbonReductionTip();
+            } else {
+                document.getElementById("suggestion-box").style.display = "none";
+            }
+        
+            if (reset) {
+                barChart.data.datasets[0].data = [0, 0, 0, 0, 0]; 
+            } else {
+                barChart.data.datasets[0].data.shift();
+                barChart.data.datasets[0].data.push(carbonLevel);
+            }
+        
+            barChart.update();
+        }
+
+        function getCarbonReductionTip() {
+            const tips = [
+                " Use public transport or cycle instead of cars.",
+                " Plant trees to absorb more CO₂.",
+                " Reduce electricity usage—switch off unnecessary lights!",
+                " Use energy-efficient appliances at home.",
+                " Reduce waste—recycle and compost.",
+                " Unplug unused electronic devices to save energy.",
+                " Reduce fossil fuel usage by switching to renewable energy."
+            ];
+            return tips[Math.floor(Math.random() * tips.length)];
+        }
+
+        function logout() {
+            alert("Logging out...");
+            window.location.href = "login.html";
+        }
+
+        const ctxBar = document.getElementById('carbonBarChart').getContext('2d');
+        const barChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['4s ago', '3s ago', '2s ago', '1s ago', 'Now'],
+                datasets: [{
+                    label: 'CO₂ Levels (ppm)',
+                    data: [0, 0, 0, 0, 0], 
+                    backgroundColor: '#f9a825'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        min: 370,
+                        max: 420
+                    }
+                }
+            }
+        });
+            document.addEventListener("DOMContentLoaded", () => {
+                updateSensorData(); 
+                setInterval(updateSensorData, 5000); 
+            });
+        
+            function updateSensorData() {
+                let vehicleCount = Math.floor(Math.random() * 50) + 10;
+                let temperature = 27
+                let humidity = Math.floor(Math.random() * 40) + 30;
+        
+                document.getElementById("vehicle-count").innerText = vehicleCount;
+                document.getElementById("temperature").innerText = temperature;
+                document.getElementById("humidity").innerText = humidity;
+            }
+        
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Tips | NetZeroX</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #42a5f5, #66bb6a);
+            flex-direction: column;
+            color: white;
+        }
+
+        .navbar {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .tips-container {
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            margin-top: 60px;
+        }
+
+        .btn {
+            background-color: #f9a825;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #ff7043;
+        }
+
+        .tip-box {
+            background: rgba(171, 234, 126, 0.9);
+            color: black;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <button class="nav-btn" onclick="location.href='home.html'">Home</button>
+        <button class="nav-btn" onclick="location.href='leaderboard.html'"> Leaderboard</button>
+        <button class="nav-btn" onclick="location.href='login.html'">Logout</button>
+    </div>
+
+    <div class="tips-container">
+        <h2> Eco Tips & Challenges</h2>
+        <p>Take action and reduce your carbon footprint with personalized tips.</p>
+
+        <div id="tip-box" class="tip-box">
+            <h3>Today's Tip</h3>
+            <p id="tip-text">Click below to get a new tip!</p>
+        </div>
+
+        <button class="btn" onclick="getNewTip()"> Get New Tip</button>
+        <button class="btn" onclick="startChallenge()"> Start Daily Challenge</button>
+
+        <div id="challenge-box" class="tip-box" style="display: none;">
+            <h3> Daily Challenge</h3>
+            <p id="challenge-text"></p>
+            <button class="btn" onclick="completeChallenge()"> Mark as Completed</button>
+        </div>
+    </div>
+
+    <script>
+        const ecoTips = [
+            " Use public transport or cycle instead of driving.",
+            " Plant a tree to offset carbon emissions.",
+            " Switch off lights when not in use to save energy.",
+            " Use energy-efficient appliances at home.",
+            " Reduce waste by recycling and composting.",
+            " Unplug devices when not in use to cut energy wastage.",
+            " Reduce fossil fuel consumption by switching to renewable energy."
+        ];
+
+        const challenges = [
+            " Walk or cycle for at least 30 minutes today instead of driving.",
+            " Plant a small plant or tree in your home or community.",
+            " Use no more than 2 hours of electricity for non-essential appliances today.",
+            " Recycle at least 3 plastic items today.",
+            " Have a plant-based meal to reduce CO₂ emissions from food production."
+        ];
+
+        function getNewTip() {
+            let randomTip = ecoTips[Math.floor(Math.random() * ecoTips.length)];
+            document.getElementById("tip-text").innerText = randomTip;
+        }
+
+        function startChallenge() {
+            let randomChallenge = challenges[Math.floor(Math.random() * challenges.length)];
+            document.getElementById("challenge-text").innerText = randomChallenge;
+            document.getElementById("challenge-box").style.display = "block";
+        }
+
+        function completeChallenge() {
+            alert(" Challenge Completed! Keep reducing CO₂ emissions.");
+            document.getElementById("challenge-box").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>

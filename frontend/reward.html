@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetZeroX - Rewards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            text-align: center;
+        }
+        header {
+            background-color: #2f3542;
+            color: white;
+            padding: 20px;
+        }
+        .dashboard {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        .card {
+            background-color: white;
+            padding: 20px;
+            margin: 15px;
+            width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .qr-code {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>NetZeroX Rewards</h1>
+        <p>Earn Bitcoin for Reducing Carbon Emissions</p>
+    </header>
+
+    <div class="dashboard">
+        <div class="card">
+            <h3>Your Bitcoin Rewards</h3>
+            <p>Carbon Reduced: <strong><span id="carbonReduced">0</span> g CO₂</strong></p>
+            <p>Bitcoin Earned: <strong><span id="btcBalance">0.000 BTC</span></strong></p>
+            
+            <h4>Your Bitcoin Address:</h4>
+            <p>1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</p>
+            <button class="btn" onclick="copyBitcoinAddress()">Copy Address</button>
+
+            <div class="qr-code">
+                <h4>Scan QR to Redeem</h4>
+                <a href="https://www.binance.com/en/buy-sell-crypto" target="_blank">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://www.binance.com/en/buy-sell-crypto&size=200x200" alt="Binance QR Code">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateRewards() {
+            document.getElementById("carbonReduced").innerText = localStorage.getItem("carbonReduced") || 0;
+            document.getElementById("btcBalance").innerText = localStorage.getItem("btcEarned") || "0.000000 BTC";
+        }
+
+        function copyBitcoinAddress() {
+            navigator.clipboard.writeText("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa").then(() => {
+                alert("Bitcoin address copied to clipboard!");
+            });
+        }
+
+        updateRewards();
+    </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetZeroX</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Background Video */
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* Overlay to fix clicking issue */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 1.2rem;
+            max-width: 700px;
+        }
+
+        .navbar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 3;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .features {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 50px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-box {
+            flex: 1;
+            max-width: 300px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .feature-box p {
+            display: none;
+        }
+
+        .feature-box.active p {
+            display: block;
+        }
+
+        .info-section {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .info-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .info-section p {
+            max-width: 800px;
+            margin: auto;
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .footer {
+            background: black;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+    <script>
+        function toggleFeature(element) {
+            element.classList.toggle("active");
+        }
+    </script>
+</head>
+<body>
+
+    <video autoplay loop muted playsinline id="bg-video">
+        <source src="https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/rytughwRxj1s1gmp3/videoblocks-tropical-waterfall-hidden-in-lush-jungle-green-green-leaves-motion-by-the-wind-breeze-high-humidity_bpvq0y31i__b7d51b46e685524ecb6072978726c7d9__P360.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+
+    <!-- Overlay to prevent background from blocking clicks -->
+    <div class="overlay"></div>
+
+    <div class="navbar">
+        <a href="index.html">Home</a>
+        <a href="public/dashboard.html">Dashboard</a>
+        <a href="rewards/rewards.html">Rewards</a>
+        <a href="rewards/about.html">About</a>
+    </div>
+
+    <div class="container">
+        <h1>Building a Greener Future</h1>
+        <p>NetZeroX is committed to reducing carbon emissions through innovative solutions. Join us in creating a sustainable world.</p>
+    </div>
+
+    <div class="features">
+        <div class="feature-box" onclick="toggleFeature(this)">
+            <h2>Carbon Calculator</h2>
+            <p>Track your carbon footprint and take steps towards reduction.</p>
+        </div>
+        <div class="feature-box" onclick="toggleFeature(this)">
+            <h2>Real-Time Carbon Detection</h2>
+            <p>Get live updates on emissions in your area.</p>
+        </div>
+        <div class="feature-box" onclick="toggleFeature(this)">
+            <h2>Rewards</h2>
+            <p>Earn incentives for sustainable actions.</p>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h2>We’re Building the Future of Carbon Tracking</h2>
+        <p>NetZeroX is an AI-powered carbon footprint tracker that helps individuals and businesses monitor and reduce their CO₂ emissions in real time. By combining IoT sensors and AI-driven analytics, we provide accurate insights into environmental impact, making sustainability effortless and actionable. Our solution is cost-effective, real-time, and data-driven, utilizing ESP-01 and Arduino Nano to collect sensor data on air quality, temperature, and human activity. Unlike traditional carbon tracking methods, NetZeroX offers automation and AI-based predictions, enabling smarter decision-making for a greener planet. We collaborate with businesses and individuals to simplify carbon footprint reduction, making it easier to transition to eco-friendly practices without sacrificing efficiency or affordability. With NetZeroX, sustainability is no longer a challenge—it’s a smart choice.</p>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 NetZeroX. All Rights Reserved.
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetZeroX Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #42a5f5, #66bb6a);
+            flex-direction: column;
+            color: white;
+        }
+        .dashboard-container {
+            width: 90%;
+            max-width: 1200px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .btn {
+            background-color: #f9a825;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .btn:hover {
+            background-color: #ff7043;
+        }
+        .suggestions-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            display: none;
+            width: 60%;
+            max-width: 500px;
+            color: white;
+        }
+        nav {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="login.html" class="btn">Logout</a>
+        </nav>
+        <h2 id="welcome-message">Welcome, User</h2>
+        <button onclick="logout()">Logout</button>
+
+        
+
+        <div>
+            <h3>Total Carbon Reduced: <span id="carbon-reduced">0</span> g CO2</h3>
+            <a href="reward.html" class="btn" id="reward-button">View Rewards</a>
+        </div>
+    </div>
+
+    <div id="suggestions" class="suggestions-container"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const username = localStorage.getItem("username");
+
+            if (!username) {
+                window.location.href = "../login.html";
+            } else {
+                document.getElementById("welcome-message").textContent = `Welcome, ${username}`;
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem("username");
+            window.location.href = "../login.html";
+        }
+
+        function getRealTimeData() {
+            return Math.floor(Math.random() * 600) + 100; // Simulated real-time data
+        }
+
+        
+        function showSuggestion(message) {
+            const suggestionsBox = document.getElementById("suggestions");
+            suggestionsBox.innerText = message;
+            suggestionsBox.style.display = "block";
+            setTimeout(() => {
+                suggestionsBox.style.display = "none";
+            }, 5000);
+        }
+
+        let totalCarbonReduced = 0;
+
+        function updateDashboard() {
+            const emissionLevel = getRealTimeData();
+            showSuggestion(generateSuggestion(emissionLevel));
+
+            totalCarbonReduced += emissionLevel;
+
+            // Update real-time chart
+            barChart.data.datasets[0].data.shift();
+            barChart.data.datasets[0].data.push(emissionLevel);
+            barChart.update();
+
+            // Update carbon reduced and check if rewards button should be displayed
+            document.getElementById("carbon-reduced").innerText = totalCarbonReduced;
+
+            if (totalCarbonReduced >= 1000) {
+                document.getElementById("reward-button").style.display = "inline-block";
+            }
+        }
+
+        setInterval(updateDashboard, 5000);
+        updateDashboard();
+
+        const ctxPie = document.getElementById('carbonChart').getContext('2d');
+        new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: ['Sector A', 'Sector B', 'Sector C', 'Sector D', 'Sector E'],
+                datasets: [{
+                    data: [39, 19, 18, 12, 4],
+                    backgroundColor: ['#f9a825', '#ff7043', '#42a5f5', '#66bb6a', '#8e24aa']
+                }]
+            }
+        });
+
+        const ctxBar = document.getElementById('carbonChart').getContext('2d');
+        const barChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['1s ago', '2s ago', '3s ago', '4s ago', 'Now'],
+                datasets: [{
+                    label: 'Real-time Emissions',
+                    data: [300, 320, 310, 330, getRealTimeData()],
+                    backgroundColor: '#f9a825'
+                }]
+            },
+            options: { responsive: true }
+        });
+    </script>
+</body>
+</html>

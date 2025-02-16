@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Footprint Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background: linear-gradient(135deg, #42a5f5, #66bb6a);
+            color: white;
+        }
+        
+        .navbar {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        #map {
+            width: 90%;
+            height: 500px;
+            margin: 80px auto 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn {
+            background-color: #f9a825;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #ff7043;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <button class="nav-btn" onclick="location.href='home.html'">Home</button>
+        <button class="nav-btn" onclick="location.href='feature.html'">✨ Features</button>
+        <button class="nav-btn" onclick="location.href='dashboard.html'">Dashboard</button>
+    </div>
+
+    <h2> NetZeroX Carbon Footprint Map</h2>
+    <p>Track CO₂ levels and reductions globally.</p>
+
+    <div id="map"></div>
+    <button class="btn" onclick="addMarker()">Mark My CO₂ Reduction</button>
+
+    <script>
+        let map = L.map('map').setView([20, 0], 2); 
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        let carbonData = [
+            { lat: 40.7128, lng: -74.0060, level: 410, city: "New York, USA" },  
+            { lat: 51.5074, lng: -0.1278, level: 415, city: "London, UK" },  
+            { lat: 35.6895, lng: 139.6917, level: 420, city: "Tokyo, Japan" },  
+            { lat: 19.0760, lng: 72.8777, level: 430, city: "Mumbai, India" },  
+            { lat: 48.8566, lng: 2.3522, level: 405, city: "Paris, France" },  
+            { lat: -33.8688, lng: 151.2093, level: 400, city: "Sydney, Australia" },  
+            { lat: -23.5505, lng: -46.6333, level: 418, city: "São Paulo, Brazil" },  
+            { lat: 30.0444, lng: 31.2357, level: 422, city: "Cairo, Egypt" },
+            { lat: 55.7558, lng: 37.6173, level: 419, city: "Moscow, Russia" },
+            { lat: -1.286389, lng: 36.817223, level: 412, city: "Nairobi, Kenya" },
+            { lat: -34.603722, lng: -58.381592, level: 416, city: "Buenos Aires, Argentina" },
+            { lat: 39.9042, lng: 116.4074, level: 435, city: "Beijing, China" },
+            { lat: 52.5200, lng: 13.4050, level: 408, city: "Berlin, Germany" },
+            { lat: 37.7749, lng: -122.4194, level: 409, city: "San Francisco, USA" },
+            { lat: -26.2041, lng: 28.0473, level: 417, city: "Johannesburg, South Africa" },
+            { lat: 13.7563, lng: 100.5018, level: 420, city: "Bangkok, Thailand" },
+            { lat: -8.4095, lng: 115.1889, level: 405, city: "Bali, Indonesia" }
+        ];
+
+        function getMarkerColor(level) {
+            if (level <= 405) return "green";
+            if (level <= 415) return "orange";
+            return "red";
+        }
+
+        let markers = L.markerClusterGroup();
+
+        function updateMap() {
+            carbonData.forEach(data => {
+                let marker = L.circleMarker([data.lat, data.lng], {
+                    color: getMarkerColor(data.level),
+                    radius: 8
+                }).bindPopup(`<strong>${data.city}</strong><br>CO₂ Level: ${data.level} ppm`);
+
+                markers.addLayer(marker);
+            });
+            map.addLayer(markers);
+        }
+
+        function addMarker() {
+            navigator.geolocation.getCurrentPosition(position => {
+                let lat = position.coords.latitude;
+                let lng = position.coords.longitude;
+                let userCO2Reduction = Math.floor(Math.random() * 15) + 5;
+
+                let marker = L.circleMarker([lat, lng], {
+                    color: "blue",
+                    radius: 10
+                }).bindPopup(` You reduced ${userCO2Reduction} g CO₂!`).openPopup();
+
+                markers.addLayer(marker);
+            }, () => {
+                alert("⚠ Unable to get location. Please enable location services.");
+            });
+        }
+
+        updateMap();
+    </script>
+
+</body>
+</html>
