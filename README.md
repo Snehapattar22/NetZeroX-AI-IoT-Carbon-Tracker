@@ -15,19 +15,14 @@ User Auth (Planned): Username/password login system<br>
 
 # Tech Stack
 
-Backend & API 
-Python
-Flask
-REST APIs
-IoT
-ESP8266 / ESP-01
-Arduino Nano
-DHT11 Sensor
-IR Sensor
-Database
+Backend & API <br>
+Python<br>
+Flask<br>
+REST APIs<br>
+IoT<br>
+ESP8266<br>
+Arduino Nano<br>
+DHT11 Sensor<br>
+IR Sensor<br>
+Database<br>
 Firebase Realtime Database
-
-# AI / ML
-
-Scikit-learn
-CO₂ prediction model
